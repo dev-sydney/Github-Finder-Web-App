@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 
@@ -7,6 +8,7 @@ import NavBar from './components/layouts/NavBar';
 import Users from './components/layouts/users/Users';
 import SearchComponent from './components/SearchComponent';
 import Alert from './components/layouts/Alert';
+import About from './components/pages/About';
 class App extends Component {
   state = {
     users: [],
@@ -55,39 +57,34 @@ class App extends Component {
   render() {
     const { users, loading } = this.state;
     return (
-      <Fragment>
-        <NavBar />
-        <Alert alert={this.state.alert} />
-        <div className="container">
-          <SearchComponent
-            searchUsers={this.searchUsersA}
-            clearUsers={this.clearUsersA}
-            showClear={users.length > 0 ? true : false}
-            setAlert={this.setAlertA}
-          />
-          <Users loadState={loading} users={users} />
-        </div>
-      </Fragment>
+      <Router>
+        <Fragment>
+          <NavBar />
+          <div className="container">
+            <Alert alert={this.state.alert} />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Fragment>
+                    <SearchComponent
+                      searchUsers={this.searchUsersA}
+                      clearUsers={this.clearUsersA}
+                      showClear={users.length > 0 ? true : false}
+                      setAlert={this.setAlertA}
+                    />
+                    <Users loadState={loading} users={users} />
+                  </Fragment>
+                )}
+              />
+              <Route exact path="/about" component={About} />
+            </Switch>
+          </div>
+        </Fragment>
+      </Router>
     );
   }
 }
 
 export default App;
-/* 
-styling for the spinner
-
-styling for the submit button
-  
-
-
-styling for the userscontainer container
-
-
-
-
-
-
-
-
-
- */
