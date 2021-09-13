@@ -9,9 +9,11 @@ import Users from './components/layouts/users/Users';
 import SearchComponent from './components/SearchComponent';
 import Alert from './components/layouts/Alert';
 import About from './components/pages/About';
+import UserProfileComponent from './components/layouts/users/UserProfileComponent';
 class App extends Component {
   state = {
     users: [],
+    user: {},
     loading: false,
     alert: null,
   };
@@ -49,13 +51,27 @@ class App extends Component {
       loading: false,
     });
   };
+  //get a single github user
+  getUser = async username => {
+    this.setState({
+      loading: true,
+    });
+    const res = await axios.get(
+      `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+
+    this.setState({
+      user: res.data,
+      loading: false,
+    });
+  };
   setAlertA = (message, type) => {
     this.setState({ alert: { message: message, type: type } });
 
     setTimeout(() => this.setState({ alert: null }), 3000);
   };
   render() {
-    const { users, loading } = this.state;
+    const { users, user, loading } = this.state;
     return (
       <Router>
         <Fragment>
@@ -79,6 +95,18 @@ class App extends Component {
                 )}
               />
               <Route exact path="/about" component={About} />
+              <Route
+                exact
+                path="/user/:login"
+                render={props => (
+                  <UserProfileComponent
+                    {...props}
+                    getUser={this.getUser}
+                    user={user}
+                    loading={loading}
+                  />
+                )}
+              />
             </Switch>
           </div>
         </Fragment>
