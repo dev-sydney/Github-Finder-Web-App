@@ -4,8 +4,8 @@ import './App.css';
 
 ///////////COMPONENTS-IMPORTS/////////
 import NavBar from './components/layouts/NavBar';
-import Users from './components/layouts/users/Users';
-import SearchComponent from './components/SearchComponent';
+import Home from './components/pages/Home';
+import Notfound from './components/pages/NotFound';
 import Alert from './components/layouts/Alert';
 import About from './components/pages/About';
 import UserProfileComponent from './components/layouts/users/UserProfileComponent';
@@ -43,22 +43,14 @@ const App = () => {
             <div className="container">
               <Alert />
               <Switch>
-                <Route
-                  exact
-                  path="/"
-                  render={props => (
-                    <Fragment>
-                      <SearchComponent />
-                      <Users />
-                    </Fragment>
-                  )}
-                />
+                <Route exact path="/" component={Home} />
                 <Route exact path="/about" component={About} />
                 <Route
                   exact
                   path="/user/:login"
                   component={UserProfileComponent}
                 />
+                <Route component={Notfound} />
               </Switch>
             </div>
           </Fragment>
