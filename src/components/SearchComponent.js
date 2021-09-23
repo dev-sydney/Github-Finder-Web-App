@@ -1,60 +1,54 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useContext } from 'react';
+import GithubContext from '../context/github/githubContext';
+import AlertContext from '../context/alert/alertContext';
 
-class SearchComponent extends Component {
-  state = {
-    searchInput: '',
-  };
-  static ProtoTypes = {
-    searchUsers: PropTypes.func.isRequired,
-    clearUsers: PropTypes.func.isRequired,
-    showClear: PropTypes.bool.isRequired,
-    setAlert: PropTypes.func.isRequired,
+const SearchComponent = () => {
+  const [text, setText] = useState('');
+
+  const githubContext = useContext(GithubContext);
+  const { setAlert } = useContext(AlertContext);
+
+  const searchInputOnChangeHandler = e => {
+    setText(e.target.value);
   };
 
-  searchInputOnChangeHandler = e => {
-    this.setState({
-      searchInput: e.target.value,
-    });
-  };
-  formSubmitHandler = e => {
+  const formSubmitHandler = e => {
     e.preventDefault();
-    this.state.searchInput === ''
-      ? this.props.setAlert('Please Enter Something...', 'light')
-      : this.props.searchUsers(this.state.searchInput);
-
-    this.setState({
-      searchInput: '',
-    });
+    if (text === '') {
+      setAlert('Please Enter Something...', 'light');
+    } else {
+      githubContext.searchUsersA(text);
+      setText('');
+    }
   };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.formSubmitHandler} className="form">
-          <input
-            type="text"
-            name="text"
-            placeholder="Search for Users..."
-            value={this.state.searchInput}
-            onChange={this.searchInputOnChangeHandler}
-          />
-          <input
-            type="submit"
-            className="btn btn-dark btn-block"
-            value="Search"
-          />
-        </form>
-        {this.props.showClear && (
-          <button
-            className="btn btn-light btn-block"
-            onClick={this.props.clearUsers}
-          >
-            Clear
-          </button>
-        )}
-      </div>
-    );
-  }
-}
+  const clearinputField = () => {
+    setText('');
+  };
+
+  return (
+    <div>
+      <form onSubmit={formSubmitHandler} className="form">
+        <input
+          type="text"
+          name="text"
+          placeholder="Search for Users..."
+          value={text}
+          onChange={searchInputOnChangeHandler}
+        />
+        <input
+          type="submit"
+          className="btn btn-dark btn-block"
+          value="Search"
+        />
+      </form>
+      {text && (
+        <button className="btn btn-light btn-block" onClick={clearinputField}>
+          Clear
+        </button>
+      )}
+    </div>
+  );
+};
+
 export default SearchComponent;
