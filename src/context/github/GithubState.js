@@ -7,6 +7,7 @@ import { SEARCH_USERS, GET_USER, GET_REPOS, SET_LOADING } from '../Types';
 
 //import * as types from '../Types';
 ////////////////////////////////////////////////////////////////
+
 const GithubState = props => {
   /* const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
