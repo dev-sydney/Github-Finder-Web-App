@@ -57,7 +57,7 @@ const App = () => {
                 <Route
                   exact
                   path="/user/:login"
-                  render={props => <UserProfileComponent {...props} />}
+                  component={UserProfileComponent}
                 />
               </Switch>
             </div>
